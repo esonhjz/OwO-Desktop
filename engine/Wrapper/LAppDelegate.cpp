@@ -13,6 +13,7 @@
 #include "LAppLive2DManager.hpp"
 #include "LAppView.hpp"
 #include "LAppPal.hpp"
+#include "../../src/NetworkManager.hpp"
 #include "LAppDefine.hpp"
 #include "LAppTextureManager.hpp"
 #include "LAppModel.hpp"
@@ -298,6 +299,7 @@ void LAppDelegate::Run()
             LAppPal::UpdateTime();
 
             // 画面クリアなど
+            desktop::NetworkManager::GetInstance().PollAndDispatch(LAppLive2DManager::GetInstance());
             StartFrame();
 
             // 描画
@@ -598,6 +600,25 @@ LRESULT WINAPI LAppDelegate::MsgProc(HWND wnd, UINT msg, WPARAM wParam, LPARAM l
             s_instance->_view->OnTouchesMoved(s_instance->_mouseX, s_instance->_mouseY);
         }
         return 0;
+
+    case WM_KEYDOWN:
+        {
+            LAppLive2DManager* mgr = LAppLive2DManager::GetInstance();
+            if (mgr)
+            {
+                if (wParam == VK_SPACE)
+                {
+                    mgr->NextScene();
+                    return 0;
+                }
+                else if (wParam >= 0x31 && wParam <= 0x39)
+                {
+                    mgr->ChangeScene(static_cast<Csm::csmInt32>(wParam - 0x31));
+                    return 0;
+                }
+            }
+        }
+        break;
 
     default:
         break;

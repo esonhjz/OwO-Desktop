@@ -106,6 +106,7 @@ float4 PixelMasked(VS_OUT In) : SV_Target {
     maskUv.y = 1.0f + maskUv.y;
     float4 clipMask = (1.0f - maskTexture.Sample(mainSampler, maskUv)) * channelFlag;
     float maskVal = clipMask.r + clipMask.g + clipMask.b + clipMask.a;
+    maskVal = smoothstep(0.1, 0.9, maskVal);
     color = color * maskVal;
     return color;
 }
@@ -121,6 +122,7 @@ float4 PixelMaskedInverted(VS_OUT In) : SV_Target {
     maskUv.y = 1.0f + maskUv.y;
     float4 clipMask = (1.0f - maskTexture.Sample(mainSampler, maskUv)) * channelFlag;
     float maskVal = clipMask.r + clipMask.g + clipMask.b + clipMask.a;
+    maskVal = smoothstep(0.1, 0.9, maskVal);
     color = color * (1.0f - maskVal);
     return color;
 }
@@ -135,6 +137,7 @@ float4 PixelMaskedPremult(VS_OUT In) : SV_Target {
     maskUv.y = 1.0f + maskUv.y;
     float4 clipMask = (1.0f - maskTexture.Sample(mainSampler, maskUv)) * channelFlag;
     float maskVal = clipMask.r + clipMask.g + clipMask.b + clipMask.a;
+    maskVal = smoothstep(0.1, 0.9, maskVal);
     color = color * maskVal;
     return color;
 }
@@ -149,6 +152,7 @@ float4 PixelMaskedInvertedPremult(VS_OUT In) : SV_Target {
     maskUv.y = 1.0f + maskUv.y;
     float4 clipMask = (1.0f - maskTexture.Sample(mainSampler, maskUv)) * channelFlag;
     float maskVal = clipMask.r + clipMask.g + clipMask.b + clipMask.a;
+    maskVal = smoothstep(0.1, 0.9, maskVal);
     color = color * (1.0f - maskVal);
     return color;
 }

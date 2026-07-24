@@ -13,6 +13,50 @@ if(MSVC)
 endif()
 
 # =========================================================================
+# Third-party Dependencies (WebSocket + JSON)
+# =========================================================================
+
+# --- nlohmann/json (header-only) ---
+set(NLOHMANN_JSON_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/nlohmann")
+if(NOT EXISTS "${NLOHMANN_JSON_DIR}/json.hpp")
+    message(STATUS "[OwO-Desktop] Downloading nlohmann/json...")
+    file(DOWNLOAD
+        "https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp"
+        "${CMAKE_BINARY_DIR}/nlohmann_json.hpp"
+        STATUS NLOHMANN_DL_STATUS TIMEOUT 30
+    )
+    list(GET NLOHMANN_DL_STATUS 0 NLOHMANN_DL_CODE)
+    if(NOT NLOHMANN_DL_CODE EQUAL 0)
+        message(FATAL_ERROR "Failed to download nlohmann/json. Place json.hpp into ${NLOHMANN_JSON_DIR}/json.hpp")
+    endif()
+    file(RENAME "${CMAKE_BINARY_DIR}/nlohmann_json.hpp" "${CMAKE_BINARY_DIR}/json.hpp")
+    set(NLOHMANN_JSON_DIR "${CMAKE_BINARY_DIR}")
+else()
+    message(STATUS "[OwO-Desktop] Using local nlohmann/json")
+endif()
+
+# --- IXWebSocket ---
+set(IXWEBSOCKET_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/ixwebsocket")
+if(EXISTS "${IXWEBSOCKET_DIR}/CMakeLists.txt")
+    message(STATUS "[OwO-Desktop] Using local IXWebSocket")
+    set(USE_TLS OFF CACHE BOOL "" FORCE)
+    set(USE_ZLIB OFF CACHE BOOL "" FORCE)
+    add_subdirectory("${IXWEBSOCKET_DIR}" "${CMAKE_BINARY_DIR}/ixwebsocket")
+else()
+    include(FetchContent)
+    message(STATUS "[OwO-Desktop] Fetching IXWebSocket from GitHub...")
+    FetchContent_Declare(ixwebsocket
+        GIT_REPOSITORY "https://github.com/machinezone/IXWebSocket.git"
+        GIT_TAG "v11.4.6"
+    )
+    set(USE_TLS OFF CACHE BOOL "" FORCE)
+    set(USE_OPEN_SSL OFF CACHE BOOL "" FORCE)
+    set(USE_MBED_TLS OFF CACHE BOOL "" FORCE)
+    set(USE_ZLIB OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(ixwebsocket)
+endif()
+
+# =========================================================================
 # License Compliance & Proprietary SDK Verification
 # =========================================================================
 set(LIVE2D_CORE_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/third_party/Live2D_SDK/Core/include/Live2DCubismCore.h")
@@ -112,10 +156,12 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/engine/Wrapper"
     "${LIVE2D_CORE_INCLUDE_DIR}"
     "${DIRECTXTK_INCLUDE_DIR}"
+    "${NLOHMANN_JSON_DIR}"
 )
 
 # Link Windows System Libraries & Live2D Core / DirectXTK
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    ixwebsocket
     ${LIVE2D_CORE_LIB}
     ${DIRECTXTK_LIB}
     d3d11.lib

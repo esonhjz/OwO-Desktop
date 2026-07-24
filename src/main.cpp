@@ -5,17 +5,18 @@
 
 #include <windows.h>
 #include "LAppDelegate.hpp"
-#include "AgentNetworkClient.hpp"
+#include "NetworkManager.hpp"
 
-int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+                     LPSTR lpCmdLine, int nCmdShow)
 {
-    // Initialize Agent Network Client for future WebSocket control
-    desktop::AgentNetworkClient agentClient;
-    agentClient.Initialize("ws://localhost:8080");
+    // Initialize WebSocket for remote control from Python backend
+    desktop::NetworkManager::GetInstance().Initialize("ws://127.0.0.1:3000/ws");
 
     // Initialize Win32 window, D3D11 device, and Live2D Cubism SDK
     if (!LAppDelegate::GetInstance()->Initialize())
     {
+        desktop::NetworkManager::GetInstance().Shutdown();
         LAppDelegate::ReleaseInstance();
         return 0;
     }
@@ -24,6 +25,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     LAppDelegate::GetInstance()->Run();
 
     // Cleanup resources on exit
+    desktop::NetworkManager::GetInstance().Shutdown();
     LAppDelegate::ReleaseInstance();
 
     return 0;

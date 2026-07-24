@@ -1,26 +1,52 @@
-# =========================================================================
-# Git Ignore configuration for Desktop Live2D Project
-# Strictly ignore proprietary/closed-source SDK files and copyrighted assets
+﻿# =========================================================================
+# Git Ignore — OwO-Desktop
 # =========================================================================
 
-# Build & Temporary directories
+# Build output
 build/
 bin/
 out/
+FrameworkShaders/
+SampleShaders/
+
+# IDE
 .vs/
+.vscode/
+.idea/
 *.user
 *.suo
 *.sln.docstates
 
-# Proprietary SDK Core components (Live2D Cubism Core license compliance)
-third_party/Live2D_SDK/
+# MSVC / CMake generated
+CMakeUserPresets.json
 
-# Compiled binaries and static libraries
+# Runtime artifacts
+*.log
+
+# Third-party dependencies (managed by CMake FetchContent or manual install)
+third_party/Live2D_SDK/**
+third_party/DirectXTK/**
+third_party/ixwebsocket/**
+third_party/ixwebsocket/.git
+third_party/nlohmann/**
+
+# Compiled binaries
 *.dll
 *.lib
 *.exe
 *.pdb
 *.obj
+*.exp
+*.ilk
 
-# Copyrighted Live2D character model assets
-assets/models/
+# Copyrighted Live2D model assets
+assets/models/**
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# =========================================================================
+# Allow .gitkeep to preserve directory structure
+# =========================================================================
+!.gitkeep

@@ -105,6 +105,9 @@ void LAppModel::LoadAssets(const csmChar* dir, const csmChar* fileName)
     }
 
     CreateRenderer(LAppDelegate::GetInstance()->GetWindowWidth(), LAppDelegate::GetInstance()->GetWindowHeight());
+    // Increase mask buffer resolution for thinner outlines
+    GetRenderer<Rendering::CubismRenderer_D3D11>()->SetDrawableClippingMaskBufferSize(2048, 2048);
+    GetRenderer<Rendering::CubismRenderer_D3D11>()->SetOffscreenClippingMaskBufferSize(2048, 2048);
 
     SetupTextures();
 }
@@ -568,6 +571,9 @@ void LAppModel::ReloadRenderer()
     DeleteRenderer();
 
     CreateRenderer(LAppDelegate::GetInstance()->GetWindowWidth(), LAppDelegate::GetInstance()->GetWindowHeight());
+    // Increase mask buffer resolution for thinner outlines
+    GetRenderer<Rendering::CubismRenderer_D3D11>()->SetDrawableClippingMaskBufferSize(2048, 2048);
+    GetRenderer<Rendering::CubismRenderer_D3D11>()->SetOffscreenClippingMaskBufferSize(2048, 2048);
 
     SetupTextures();
 }
