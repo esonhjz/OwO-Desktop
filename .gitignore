@@ -1,0 +1,26 @@
+# =========================================================================
+# Git Ignore configuration for Desktop Live2D Project
+# Strictly ignore proprietary/closed-source SDK files and copyrighted assets
+# =========================================================================
+
+# Build & Temporary directories
+build/
+bin/
+out/
+.vs/
+*.user
+*.suo
+*.sln.docstates
+
+# Proprietary SDK Core components (Live2D Cubism Core license compliance)
+third_party/Live2D_SDK/
+
+# Compiled binaries and static libraries
+*.dll
+*.lib
+*.exe
+*.pdb
+*.obj
+
+# Copyrighted Live2D character model assets
+assets/models/
