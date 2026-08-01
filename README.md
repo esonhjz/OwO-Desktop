@@ -40,6 +40,7 @@ OwO-Desktop/
 │   └── Wrapper/                    # 窗口/模型/渲染核心封装
 ├── test/                           # 测试辅助脚本
 │   └── test_ws_server.py           # WebSocket 模拟服务端 (Python)
+├── python-backend/                 # Python AI 后端（WebSocket 服务端、LLM 情绪映射、TTS 口型、模型扫描）
 ├── assets/models/                  # 🚫 模型资源目录 (gitignored)
 ├── third_party/                    # 🚫 第三方依赖库 (gitignored)
 │   ├── Live2D_SDK/Core/            #   Cubism Core SDK（闭源）
@@ -109,6 +110,26 @@ cmake --build build --config Release
 pip install websockets
 python test\test_ws_server.py
 ```
+
+---
+
+## 🐍 Python 后端（AI 决策层）
+
+`python-backend/` 是桌宠的「大脑」：启动 WebSocket 服务端 `ws://0.0.0.0:3000/ws`，把 LLM
+情绪输出映射为 `expression` / `motion` 指令、TTS 合成语音并实时推送 `lipsync` 口型、
+扫描模型目录维护 `switch_model` 索引，与 C++ 渲染端严格共用同一条 4 指令协议。
+
+```powershell
+cd python-backend
+pip install -r requirements.txt   # mock 模式只需 websockets
+python server.py --echo
+```
+
+> 启动后输入 `chat 今天天气真好，好开心呀！` 可跑通完整「LLM → 表情/动作 → TTS → 口型」链路。
+>
+> **联调状态**：2026-08-02 真机联调通过——`DesktopLive2D.exe` 连接成功，autotest 4 指令
+> 序列与完整 chat 链路（176 条指令）逐条送达客户端，C++ 窗口运行正常。详见
+> [`python-backend/README.md`](python-backend/README.md)。
 
 ---
 
@@ -203,6 +224,7 @@ cmake --build build --config Release
 | **数据解析** | [nlohmann/json](https://github.com/nlohmann/json) | Header-only JSON 解析器 |
 | **数学工具** | [DirectXTK](https://github.com/microsoft/DirectXTK) | 微软 Direct3D 辅助工具包 |
 | **构建系统** | CMake + MSVC | 跨编译器与 IDE 构建方案 |
+| **AI 后端** | Python 3.9+ · WebSockets | WebSocket 服务端、LLM 情绪映射、TTS 口型、模型扫描 |
 
 ---
 

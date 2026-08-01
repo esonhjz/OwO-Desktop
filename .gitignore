@@ -9,6 +9,10 @@ out/
 FrameworkShaders/
 SampleShaders/
 
+# Documentation
+docs/
+AGENTS.md
+
 # IDE
 .vs/
 .vscode/

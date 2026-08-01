@@ -1,0 +1,10 @@
+# L2D 控制系统 Phase 2 — Python 后端依赖
+#
+# 安装：pip install -r requirements.txt
+# 说明：openai / edge-tts / PyYAML 仅在使用真实 LLM / TTS / config.yaml 时才需要；
+#       mock 模式下 server.py 只需 websockets 即可运行。
+
+websockets>=10.4,<15.0      # WebSocket 服务端（必需）
+openai>=1.30.0              # LLM 调用（OpenAI 兼容接口）+ OpenAI 兼容 TTS；mock 模式下可跳过
+edge-tts>=6.1.0             # 可选 TTS 引擎（微软 Edge TTS）；仅用 mock TTS 时可不装
+PyYAML>=6.0                 # 可选 config.yaml 解析（config.py；未提供 config.yaml 时可不装）
