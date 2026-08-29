@@ -1,6 +1,6 @@
 <div align="center">
 
-# OwO-Desktop
+# 🐱 OwO-Desktop
 
 **A Windows Live2D desktop character application with Direct3D 11 rendering and WebSocket control**
 
